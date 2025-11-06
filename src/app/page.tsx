@@ -1,9 +1,10 @@
+"use client";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { ArrowDownRight, Check, List, ListCheck, Plus, Sigma, SquarePen, Trash } from 'lucide-react';
+import { ArrowDownRight, Check, List, ListCheck, Plus, Sigma, Trash } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,19 +15,74 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { EditTask } from '@/components/edit-task';
+import { getTasksFromDb } from '@/actions/get-tasks-from-db';
+import { useEffect, useState } from 'react';
+import { Tasks } from '@/generated/prisma/client';
+import { addTasksFromDb } from '@/actions/add-tasks-from-db';
+import { deleteTaskFromDb } from '@/actions/delete-task';
+import { toast } from 'sonner';
 
 
 export default function Home() {
+  const [taskList, setTaskList] = useState<Tasks[]>([]);
+  const [task, setTask] = useState<string>("");
+
+  const handleGetTasks = async () => {
+    try {
+      const tasks = await getTasksFromDb();
+      if (!tasks) return;
+      setTaskList(tasks);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await handleGetTasks();
+    };
+
+    fetchData();
+  }, []);
+
+  const handleAddTask = async () => {
+    try {
+      if (task.length === 0 || !task) {
+        return;
+      }
+      const mynewTask = await addTasksFromDb(task);
+      if (!mynewTask) return;
+      await handleGetTasks()
+      toast.success('Tarefa adicionada com sucesso!');
+      setTask("");
+
+    } catch (error) {
+      throw error
+    }
+
+  }
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      if(!id) return
+      const deletedTask = await deleteTaskFromDb(id);
+      if (!deletedTask) return
+      await handleGetTasks()
+      toast.warning('Tarefa excluída com sucesso!');
+    } catch (error) {
+      throw error
+    }
+  }
+
   return (
     <main className='w-full h-screen bg-gray-100 flex justify-center items-center'>
 
       <Card className='w-lg'>
         <CardHeader className='flex gap-2'>
-          <Input placeholder='Adicionar Tarefa' />
-          <Button className='cursor-pointer'> <Plus />Cadastrar </Button>
+          <Input placeholder='Adicionar Tarefa' value={task} onChange={(e) => setTask(e.target.value)} />
+          <Button className='cursor-pointer' onClick={handleAddTask}> <Plus />Cadastrar </Button>
         </CardHeader>
-
 
         <CardContent>
           <Separator className='mb-4' />
@@ -37,28 +93,17 @@ export default function Home() {
           </div>
 
           <div className='mt-4 border-b-1'>
-            <div className='h-14 flex justify-between items-center border-t-1'>
-              <div className='w-1 h-full bg-green-300'></div>
-              <p className='flex-1 px-2 text-sm'>Estudar React</p>
-              <div className='flex items-center gap-2'>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <SquarePen className='cursor-pointer' size={16} />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Editar Tarefa</DialogTitle>
-                    </DialogHeader>
-                    <div className='flex gap-2'>
-                      <Input placeholder='Editar tarefa' />
-                      <Button className='cursor-pointer'>Editar</Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-                
-                <Trash className='cursor-pointer' size={16} />
+
+            {taskList.map((task) => (
+              <div className='h-14 flex justify-between items-center border-t-1' key={task.id}>
+                <div className={`${task.done ? 'w-1 h-full bg-green-400': 'w-1 h-full bg-red-400'}`}></div>
+                <p className='flex-1 px-2 text-sm cursor-pointer hover:text-gray-700'>{task.task}</p>
+                <div className='flex items-center gap-2'>
+                  <EditTask />
+                  <Trash onClick={() => handleDeleteTask(task.id)} className='cursor-pointer' size={16} />
+                </div>
               </div>
-            </div>
+            ))}
 
           </div>
 
