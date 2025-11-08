@@ -112,7 +112,6 @@ export default function Home() {
 
       await toggleDone(id);
     } catch (error) {
-      // Revert on error
       setTaskList(previousTasks);
       throw error
     }

@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Projeto Fullstack com Next.js, Prisma, PostgreSQL e Tailwind
 
-## Getting Started
+Este projeto é uma aplicação fullstack desenvolvida com **Next.js** no front-end e **Prisma + PostgreSQL** no back-end.
 
-First, run the development server:
+------------------------------------------------------------------------
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🧰 Tecnologias Utilizadas
+
+-   [Next.js 14+](https://nextjs.org/)
+-   [TypeScript](https://www.typescriptlang.org/)
+-   [TailwindCSS](https://tailwindcss.com/)
+-   [Prisma ORM](https://www.prisma.io/)
+-   [PostgreSQL](https://www.postgresql.org/)
+
+------------------------------------------------------------------------
+
+## ⚙️ Pré-requisitos
+
+Antes de rodar o projeto, você precisa ter instalado:
+
+-   [Node.js (v18+)](https://nodejs.org/)
+-   [PostgreSQL](https://www.postgresql.org/download/)
+-   Um editor de código (recomendado: [VS
+    Code](https://code.visualstudio.com/))
+
+------------------------------------------------------------------------
+
+## 📦 Como Clonar o Projeto
+
+``` bash
+# Clonar o repositório
+git clone https://github.com/francisco-jose-vieira/Lista-de-Tarefas.git
+
+# Entrar na pasta do projeto
+cd Lista-de-Tarefas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+------------------------------------------------------------------------
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧩 Instalar Dependências
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+``` bash
+npm install
+# ou
+yarn install
+```
 
-## Learn More
+------------------------------------------------------------------------
 
-To learn more about Next.js, take a look at the following resources:
+## 🔑 Configuração das Variáveis de Ambiente
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Crie um arquivo chamado `.env` na raiz do projeto e adicione as
+variáveis abaixo:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+``` env
+# URL de conexão com o banco PostgreSQL
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/nomedobanco?schema=public"
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+------------------------------------------------------------------------
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🗃️ Configurar o Banco de Dados com Prisma
+
+1.  Gere o cliente Prisma:
+
+    ``` bash
+    npx prisma generate
+    ```
+
+2.  Rode as migrações para criar as tabelas:
+
+    ``` bash
+    npx prisma migrate dev --name init
+    ```
+
+3.  (Opcional) Acesse o painel visual do banco:
+
+    ``` bash
+    npx prisma studio
+    ```
+
+------------------------------------------------------------------------
+
+## 🎨 Rodar o Servidor de Desenvolvimento
+
+``` bash
+npm run dev
+# ou
+yarn dev
+```
+
+
+
+------------------------------------------------------------------------
+
+## 🚀 Deploy 
+O projeto estará disponível em:\
+👉 **https://lista-de-tarefas-phi-vert.vercel.app/**
+
+------------------------------------------------------------------------
+
+## 👨‍💻 Autor
+
+**Francisco José**\
+📧 <franciscojose2703@gmail.com>\
+💼 Desenvolvedor Front-end
